@@ -1,5 +1,6 @@
 #include <QtGui/QApplication>
 #include "qmlapplicationviewer.h"
+#include "kqoauthmanager.h"
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
@@ -9,6 +10,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     viewer->setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer->setMainQmlFile(QLatin1String("qml/reader/main.qml"));
     viewer->showExpanded();
+
+    KQOAuthManager man;
 
     return app->exec();
 }

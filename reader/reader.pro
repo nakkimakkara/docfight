@@ -26,6 +26,8 @@ symbian:TARGET.CAPABILITY += NetworkServices
 # Speed up launching on MeeGo/Harmattan when using applauncherd daemon
 CONFIG += qdeclarative-boostable
 
+QT += network
+
 # Add dependency to Symbian components
 # CONFIG += qt-components
 
@@ -45,3 +47,8 @@ OTHER_FILES += \
     qtc_packaging/debian_harmattan/compat \
     qtc_packaging/debian_harmattan/changelog
 
+
+INCLUDEPATH += . ../kqoauth/src
+
+#LIBS += -L../kqoauth/lib -lkqoauth
+LIBS += -L../kqoauth/lib -lkqoauthd0
