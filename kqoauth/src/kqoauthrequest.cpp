@@ -103,7 +103,7 @@ QString KQOAuthRequestPrivate::oauthSignature()  {
      **/
     QByteArray baseString = this->requestBaseString();
 
-    qDebug() << "Base string: " << baseString;
+    //qDebug() << "Base string: " << baseString;
 
     QString secret = QString(QUrl::toPercentEncoding(oauthConsumerSecretKey)) + "&" + QString(QUrl::toPercentEncoding(oauthTokenSecret));
     QString signature = KQOAuthUtils::hmac_sha1(baseString, secret);
