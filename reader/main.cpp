@@ -1,17 +1,22 @@
 #include <QtGui/QApplication>
 #include "qmlapplicationviewer.h"
-#include "kqoauthmanager.h"
+#include "googlelogin.h"
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
     QScopedPointer<QApplication> app(createApplication(argc, argv));
+    QCoreApplication::setOrganizationName("DocFight");
+    QCoreApplication::setApplicationName("GoogleLogin");
+
     QScopedPointer<QmlApplicationViewer> viewer(QmlApplicationViewer::create());
 
     viewer->setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer->setMainQmlFile(QLatin1String("qml/reader/main.qml"));
     viewer->showExpanded();
 
-    KQOAuthManager man;
+    GoogleLogin login;
+    login.getAccess();
+    //login.xauth();
 
     return app->exec();
 }

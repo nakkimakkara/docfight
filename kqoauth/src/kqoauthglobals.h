@@ -40,5 +40,6 @@ const QString OAUTH_KEY_SIGNATURE("oauth_signature");
 const QString OAUTH_KEY_CALLBACK("oauth_callback");
 const QString OAUTH_KEY_VERIFIER("oauth_verifier");
 const QString OAUTH_KEY_VERSION("oauth_version");
+const QString OAUTH_KEY_SCOPE("scope");
 
 #endif // KQOAUTHGLOBALS_H

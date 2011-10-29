@@ -68,6 +68,8 @@ public:
     // Initialize the request of this type.
     void initRequest(KQOAuthRequest::RequestType type, const QUrl &requestEndpoint);
 
+    void setScope(const QString& scope);
+
     void setConsumerKey(const QString &consumerKey);
     void setConsumerSecretKey(const QString &consumerSecretKey);
 
@@ -112,6 +114,9 @@ public:
 
     // Enable verbose debug output for request content.
     void setEnableDebugOutput(bool enabled);
+
+private slots:
+    void onTimedOut();
 
 Q_SIGNALS:
     // This signal is emited if the request is not completed before the request's timeout

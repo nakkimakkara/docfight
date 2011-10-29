@@ -32,7 +32,8 @@ QT += network
 # CONFIG += qt-components
 
 # The .cpp file which was generated for your project. Feel free to hack it.
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    googlelogin.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -52,3 +53,8 @@ INCLUDEPATH += . ../kqoauth/src
 
 #LIBS += -L../kqoauth/lib -lkqoauth
 LIBS += -L../kqoauth/lib -lkqoauthd0
+
+HEADERS += \
+    googlelogin.h
+
+

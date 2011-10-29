@@ -62,6 +62,7 @@ void KQOAuthRequestPrivate::prepareRequest() {
         requestParameters.append( qMakePair( OAUTH_KEY_VERSION, oauthVersion ));
         requestParameters.append( qMakePair( OAUTH_KEY_TIMESTAMP, this->oauthTimestamp() ));
         requestParameters.append( qMakePair( OAUTH_KEY_NONCE, this->oauthNonce() ));
+        //requestParameters.append( qMakePair( OAUTH_KEY_SCOPE, scope ));
         break;
 
     case KQOAuthRequest::AccessToken:
@@ -102,6 +103,8 @@ QString KQOAuthRequestPrivate::oauthSignature()  {
      **/
     QByteArray baseString = this->requestBaseString();
 
+    qDebug() << "Base string: " << baseString;
+
     QString secret = QString(QUrl::toPercentEncoding(oauthConsumerSecretKey)) + "&" + QString(QUrl::toPercentEncoding(oauthTokenSecret));
     QString signature = KQOAuthUtils::hmac_sha1(baseString, secret);
 
@@ -134,6 +137,8 @@ QByteArray KQOAuthRequestPrivate::requestBaseString() {
     QList< QPair<QString, QString> > baseStringParameters;
     baseStringParameters.append(requestParameters);
     baseStringParameters.append(additionalParameters);
+
+    //baseStringParameters.append( qMakePair<QString, QString>("scope", QUrl::toPercentEncoding(scope)) );
 
     // Sort the request parameters. These parameters have been
     // initialized earlier.
@@ -274,6 +279,7 @@ KQOAuthRequest::KQOAuthRequest(QObject *parent) :
     qsrand(QTime::currentTime().msec());  // We need to seed the nonce random number with something.
                                           // However, we cannot do this while generating the nonce since
                                           // we might get the same seed. So initializing here should be fine.
+    connect(this, SIGNAL(requestTimedout()), this, SLOT(onTimedOut()));
 }
 
 KQOAuthRequest::~KQOAuthRequest()
@@ -456,7 +462,7 @@ QList<QByteArray> KQOAuthRequest::requestParameters() {
 QString KQOAuthRequest::contentType()
 {
     Q_D(const KQOAuthRequest);
-    return d->contentType;
+    return d->contentType;// + "scope=" + d->scope;
 }
 
 void KQOAuthRequest::setContentType(const QString &contentType)
@@ -586,4 +592,15 @@ void KQOAuthRequest::requestTimerStop()
         disconnect(&(d->timer), SIGNAL(timeout()), this, SIGNAL(requestTimedout()));
         d->timer.stop();
     }
+}
+
+void KQOAuthRequest::setScope(const QString& scope)
+{
+    Q_D(KQOAuthRequest);
+    d->scope = scope;
+}
+
+void KQOAuthRequest::onTimedOut()
+{
+    qDebug("Request timed out");
 }
