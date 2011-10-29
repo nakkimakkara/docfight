@@ -125,6 +125,11 @@ QmlApplicationViewer *QmlApplicationViewer::create()
 #endif
 }
 
+QDeclarativeEngine* QmlApplicationViewer::getEngine() const
+{
+    return d->view->engine();
+}
+
 void QmlApplicationViewer::setMainQmlFile(const QString &file)
 {
     d->mainQmlFile = d->adjustPath(file);
