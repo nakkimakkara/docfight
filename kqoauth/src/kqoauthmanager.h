@@ -121,6 +121,8 @@ public:
      */
     void sendAuthorizedRequest(QUrl requestEndpoint, const KQOAuthParameters &requestParameters);
 
+    void sendAuthorizedGetRequest(QUrl requestEndpoint, const KQOAuthParameters &requestParameters);
+
     /**
      * Sets a custom QNetworkAccessManager to handle network requests. This method can be useful if the
      * application is using some proxy settings for example.

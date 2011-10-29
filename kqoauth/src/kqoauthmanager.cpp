@@ -216,6 +216,8 @@ void KQOAuthManager::executeRequest(KQOAuthRequest *request) {
         urlWithParams.setQueryItems(urlParams);
         networkRequest.setUrl(urlWithParams);
 
+        qDebug() << "Request url: " << networkRequest.url().toString();
+
         // Submit the request including the params.
         QNetworkReply *reply = d->networkManager->get(networkRequest);
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
@@ -455,6 +457,36 @@ void KQOAuthManager::getUserAccessTokens(QUrl accessTokenEndpoint) {
     executeRequest(d->opaqueRequest);
 }
 
+void KQOAuthManager::sendAuthorizedGetRequest(QUrl requestEndpoint, const KQOAuthParameters &requestParameters)
+{
+    Q_D(KQOAuthManager);
+    if (!d->isAuthorized) {
+        qWarning() << "No access tokens retrieved. Cannot send authorized requests.";
+        d->error = KQOAuthManager::RequestUnauthorized;
+        return;
+    }
+
+    if (!requestEndpoint.isValid()) {
+        qWarning() << "Endpoint for authorized request is not valid. Cannot proceed.";
+        d->error = KQOAuthManager::RequestEndpointError;
+        return;
+    }
+
+    d->error = KQOAuthManager::NoError;
+
+    d->opaqueRequest->clearRequest();
+    d->opaqueRequest->initRequest(KQOAuthRequest::AuthorizedRequest, requestEndpoint);
+    d->opaqueRequest->setHttpMethod(KQOAuthRequest::GET);
+    d->opaqueRequest->setAdditionalParameters(requestParameters);
+    d->opaqueRequest->setToken(d->requestToken);
+    d->opaqueRequest->setTokenSecret(d->requestTokenSecret);
+    d->opaqueRequest->setConsumerKey(d->consumerKey);
+    d->opaqueRequest->setConsumerSecretKey(d->consumerKeySecret);
+
+    executeRequest(d->opaqueRequest);
+
+}
+
 void KQOAuthManager::sendAuthorizedRequest(QUrl requestEndpoint, const KQOAuthParameters &requestParameters) {
     Q_D(KQOAuthManager);
 
@@ -556,6 +588,11 @@ void KQOAuthManager::onRequestReplyReceived( QNetworkReply *reply ) {
     }
 
     emit requestReady(networkReply);
+
+    QFile output("outfile.txt");
+    output.open(QIODevice::ReadWrite);
+    output.write(networkReply);
+    output.close();
 
     reply->deleteLater();           // We need to clean this up, after the event processing is done.
 }
