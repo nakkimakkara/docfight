@@ -16,7 +16,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     GoogleLogin login;
     login.getAccess();
-    //login.xauth();
 
     return app->exec();
 }

@@ -589,11 +589,6 @@ void KQOAuthManager::onRequestReplyReceived( QNetworkReply *reply ) {
 
     emit requestReady(networkReply);
 
-    QFile output("outfile.txt");
-    output.open(QIODevice::ReadWrite);
-    output.write(networkReply);
-    output.close();
-
     reply->deleteLater();           // We need to clean this up, after the event processing is done.
 }
 
