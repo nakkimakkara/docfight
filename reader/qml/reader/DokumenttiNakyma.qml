@@ -7,6 +7,10 @@ Item {
 
     signal backClicked()
 
+    function save() {
+        loggeri.doc = dokumentti.text
+    }
+
     onVisibleChanged: if (visible) { dokumentti.text = loggeri.doc }
 
     function update() {
@@ -14,9 +18,8 @@ Item {
     }
 
     Flickable {
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        width: parent.width
+        anchors.fill: parent
+        anchors.margins: 10
         contentHeight: dokumentti.height
 
         TextEdit {

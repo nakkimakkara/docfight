@@ -9,6 +9,10 @@ Page {
         root.state = UI.MainListState
     }
 
+    function save() {
+        dokumenttiNakyma.save()
+    }
+
     Rectangle {
         id: root
         anchors.fill: parent

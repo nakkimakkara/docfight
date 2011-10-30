@@ -13,10 +13,15 @@ PageStackWindow {
     ToolBarLayout {
         id: commonTools
         visible: true
+//        ToolIcon {
+//            platformIconId: "toolbar-save"
+//            anchors.right: (parent === undefined) ? undefined : parent.right
+//            onClicked: (myMenu.status == DialogStatus.Closed) ? myMenu.open() : myMenu.close()
+//        }
         ToolIcon {
-            platformIconId: "toolbar-view-menu"
+            platformIconId: "toolbar-save"
             anchors.right: (parent === undefined) ? undefined : parent.right
-            onClicked: (myMenu.status == DialogStatus.Closed) ? myMenu.open() : myMenu.close()
+            onClicked: mainPage.save()
         }
         ToolIcon {
             platformIconId: "toolbar-back"
