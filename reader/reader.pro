@@ -51,8 +51,17 @@ OTHER_FILES += \
 
 INCLUDEPATH += . ../kqoauth/src
 
+#lib.files = ../kqoauth/lib/*
+#lib.path = $$LD_LIBRARY_PATH #/usr/lib
+
+#INSTALLS += lib
+
 #LIBS += -L../kqoauth/lib -lkqoauth
-LIBS += -L../kqoauth/lib -lkqoauthd0
+win32: {
+    LIBS += -L../kqoauth/lib -lkqoauthd0
+} else {
+    LIBS += -L../kqoauth/lib -lkqoauth
+}
 
 HEADERS += \
     googlelogin.h
