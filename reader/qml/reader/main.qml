@@ -1,63 +1,35 @@
-import QtQuick 1.0
-import "UiConstants.js" as UI
+import QtQuick 1.1
+import com.nokia.meego 1.0
 
-Rectangle {
-    id: root
-    width: 360
-    height: 360
+PageStackWindow {
+    id: appWindow
 
-    //    anchors.fill: parent
+    initialPage: mainPage
 
-    states: [
-        State {
-            name: UI.MainListState
-            PropertyChanges {
-                target: dokumenttiListaNakyma
-                visible: true
-            }
-            PropertyChanges {
-                target: dokumenttiNakyma
-                visible: false
-            }
-        },
-        State {
-            name: UI.MainDocState
-            PropertyChanges {
-                target: dokumenttiListaNakyma
-                visible: false
-            }
-            PropertyChanges {
-                target: dokumenttiNakyma
-                visible: true
-            }
-        }
-    ]
-
-    state: UI.MainListState
-
-    DokumenttiListaNakyma {
-        id: dokumenttiListaNakyma
-        anchors.fill: parent
-        visible: false
+    MainPage {
+        id: mainPage
     }
 
-    DokumenttiNakyma {
-        id: dokumenttiNakyma
-        anchors.fill: parent
-        visible: false
-
-        onBackClicked: {
-            console.log("signal received")
-            root.state = UI.MainListState
+    ToolBarLayout {
+        id: commonTools
+        visible: true
+        ToolIcon {
+            platformIconId: "toolbar-view-menu"
+            anchors.right: (parent === undefined) ? undefined : parent.right
+            onClicked: (myMenu.status == DialogStatus.Closed) ? myMenu.open() : myMenu.close()
+        }
+        ToolIcon {
+            platformIconId: "toolbar-back"
+            anchors.left: (parent === undefined) ? undefined : parent.left
+            onClicked: mainPage.back()
         }
     }
 
-    Connections {
-        target: loggeri
-        onDocChanged:
-        {
-            dokumenttiNakyma.update()
-            root.state = UI.MainDocState
+    Menu {
+        id: myMenu
+        visualParent: pageStack
+        MenuLayout {
+            MenuItem { text: qsTr("Nothing to see here") }
         }
     }
 }
