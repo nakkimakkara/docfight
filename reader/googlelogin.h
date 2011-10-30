@@ -13,6 +13,7 @@ class GoogleLogin : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString doclist READ docList NOTIFY docListChanged)
+    Q_PROPERTY(QString doc READ doc WRITE setDoc NOTIFY docChanged)
 public:
     GoogleLogin(QObject* parent = NULL);
     virtual ~GoogleLogin();
@@ -22,10 +23,14 @@ public:
     Q_INVOKABLE void updateDocumentList();
     Q_INVOKABLE void requestDocument(QString documentId);
 
+    Q_INVOKABLE void setDoc(QString doc);
+    QString doc() const;
+
 signals:
+    void docChanged();
     void docListChanged();
     void connectionEstablished();
-    void documentReady(QString documentId, QString documentXml);
+    void documentReady(QString documentId);
 
 public slots:
     void getAccess();
@@ -49,6 +54,7 @@ private:
 
     QString doccari;
 
+    QString workingDoc;
     QNetworkReply* pDocUpdateReply;
     QSet<QNetworkReply*> sDocUpdateSet;
 };

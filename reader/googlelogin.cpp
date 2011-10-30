@@ -2,6 +2,7 @@
 #include "kqoauthmanager.h"
 #include <QDebug>
 #include <QCoreApplication>
+#include <QFile>
 #include "kqoauthrequest_xauth.h"
 #include "kqoauthrequest.h"
 
@@ -97,9 +98,17 @@ void GoogleLogin::onAccessTokenReceived(QString token, QString tokenSecret) {
     qDebug() << "Access tokens now stored!";
 
     emit connectionEstablished();
+}
 
-    //updateDocumentList();
-    requestDocument("142AeJYRIHCYZHloxwffPpcvXQd_sqycOdpFzD04dGRI");
+void GoogleLogin::setDoc(QString doc)
+{
+    workingDoc = doc;
+    // TODO: Update doc on server
+}
+
+QString GoogleLogin::doc() const
+{
+    return workingDoc;
 }
 
 void GoogleLogin::updateDocumentList()
@@ -147,8 +156,8 @@ void GoogleLogin::onRequestReady(QNetworkReply* reply, QByteArray response) {
     }
     else if (sDocUpdateSet.contains(reply))
     {
-        qDebug() << response;
-        //emit documentReady();
+        workingDoc = response;
         sDocUpdateSet.remove(reply);
+        emit docChanged();
     }
 }
