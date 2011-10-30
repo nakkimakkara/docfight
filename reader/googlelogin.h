@@ -12,7 +12,7 @@ class QNetworkReply;
 class GoogleLogin : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString doclist READ docList NOTIFY docListChanged)
+    Q_PROPERTY(QString docList READ docList NOTIFY docListChanged)
     Q_PROPERTY(QString doc READ doc WRITE setDoc NOTIFY docChanged)
 public:
     GoogleLogin(QObject* parent = NULL);
