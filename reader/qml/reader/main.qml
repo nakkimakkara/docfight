@@ -14,9 +14,17 @@ Rectangle {
                 target: dokumenttiListaNakyma
                 visible: true
             }
+            PropertyChanges {
+                target: dokumenttiNakyma
+                visible: false
+            }
         },
         State {
             name: UI.MainDocState
+            PropertyChanges {
+                target: dokumenttiListaNakyma
+                visible: false
+            }
             PropertyChanges {
                 target: dokumenttiNakyma
                 visible: true
@@ -24,7 +32,7 @@ Rectangle {
         }
     ]
 
-    state: "listaNakyma"
+    state: UI.MainListState
 
     DokumenttiListaNakyma {
         id: dokumenttiListaNakyma
@@ -38,9 +46,5 @@ Rectangle {
         visible: false
 
         onBackClicked: state = UI.MainListState
-    }
-
-    Connections {
-
     }
 }

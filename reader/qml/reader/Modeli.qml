@@ -22,4 +22,6 @@ XmlListModel {
         name: "lastViewed"
         query: "gd:lastViewed/string()"
     }
+
+    onCountChanged: console.log("Model count: "+count)
 }

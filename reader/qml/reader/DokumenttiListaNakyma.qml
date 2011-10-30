@@ -13,6 +13,7 @@ Item {
 
     DokumenttiLista {
         id: dokumenttiLista
+        anchors.fill: parent
     }
 
 }
