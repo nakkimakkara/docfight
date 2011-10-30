@@ -11,16 +11,16 @@ Component {
         Gradient {
             id: blurGradient
             GradientStop {position: 0; color: "#ffffff"}
-            GradientStop {position: 0.01; color: "#555555"}
-            GradientStop {position: 0.99; color: "#555555"}
-            GradientStop {position: 1; color: "#000000"}
+            GradientStop {position: 0.01; color: "#bbbbbb"}
+            GradientStop {position: 0.99; color: "#bbbbbb"}
+            GradientStop {position: 1; color: "#999999"}
         }
         Gradient {
             id: focusGradient
             GradientStop {position: 0; color: "#dddddd"}
-            GradientStop {position: 0.01; color: "#333333"}
-            GradientStop {position: 0.99; color: "#333333"}
-            GradientStop {position: 1; color: "#000000"}
+            GradientStop {position: 0.01; color: "#bbbbbb"}
+            GradientStop {position: 0.99; color: "#bbbbbb"}
+            GradientStop {position: 1; color: "#777777"}
         }
         gradient: mouseArea.containsMouse ? focusGradient : blurGradient
 
@@ -35,7 +35,6 @@ Component {
             Text {
                 id: text
                 text: title
-                color: "white"
                 font.pixelSize: UI.ListFontSize
                 //                anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
@@ -47,14 +46,16 @@ Component {
                 Text {
                     font.pixelSize: UI.ListLastViewFontSize
                     color: "#5555ff"
+
                     text: "Last viewed on:"
                 }
 
                 Text {
                     id: lastViewedText
                     text: lastViewed
-                    color: "#5555ff"
                     font.pixelSize: UI.ListLastViewFontSize
+                    color: "#5555ff"
+
                     //                anchors.verticalCenter: parent.verticalCenter
                 }
             }
