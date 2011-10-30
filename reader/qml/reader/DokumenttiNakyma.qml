@@ -1,5 +1,7 @@
 import QtQuick 1.0
 
+import com.nokia.meego 1.0
+
 Item {
     id: dokumenttiNakyma
 
@@ -33,13 +35,21 @@ Item {
         }
     }
 
+    ToolBar {
+        anchors.bottom: parent.bottom
+    }
+
     Flickable {
         anchors.top: topBar.bottom
         anchors.bottom: parent.bottom
+        width: parent.width
         contentHeight: dokumentti.height
-        Text {
+
+        TextEdit {
             id: dokumentti
             text: ""
+
+           onTextChanged: console.log("korkeus: "+ height)
         }
     }
 }
