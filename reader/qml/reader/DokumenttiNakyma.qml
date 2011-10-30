@@ -29,8 +29,6 @@ Item {
         TextEdit {
             id: dokumentti
             text: ""
-
-           onTextChanged: console.log("korkeus: "+ height)
         }
     }
 

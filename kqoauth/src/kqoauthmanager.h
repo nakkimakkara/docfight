@@ -119,9 +119,11 @@ public:
      * Note that in order to use this method, KQOAuthManager must be in control of the user authorization process.
      * Set setHandleUserAuthorization() to true and retrieve user authorization with void getUserAuthorization.
      */
-    void sendAuthorizedRequest(QUrl requestEndpoint, const KQOAuthParameters &requestParameters);
-
-    QNetworkReply* sendAuthorizedGetRequest(QUrl requestEndpoint, const KQOAuthParameters &requestParameters);
+    QNetworkReply* sendAuthorizedRequest(QUrl requestEndpoint,
+                                         const KQOAuthParameters &requestParameters,
+                                         KQOAuthRequest::RequestHttpMethod type = KQOAuthRequest::POST,
+                                         const QByteArray& rawData = QByteArray()
+                                         );
 
     /**
      * Sets a custom QNetworkAccessManager to handle network requests. This method can be useful if the

@@ -22,6 +22,7 @@ public:
 
     Q_INVOKABLE void updateDocumentList();
     Q_INVOKABLE void requestDocument(QString documentId);
+    Q_INVOKABLE void sendDocumentUpdate(QString document);
 
     Q_INVOKABLE void setDoc(QString doc);
     QString doc() const;
@@ -53,6 +54,7 @@ private:
     QString password;
 
     QString doccari;
+    QString docId;
 
     QString workingDoc;
     QNetworkReply* pDocUpdateReply;

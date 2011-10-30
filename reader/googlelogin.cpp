@@ -103,8 +103,12 @@ void GoogleLogin::onAccessTokenReceived(QString token, QString tokenSecret) {
 
 void GoogleLogin::setDoc(QString doc)
 {
-    workingDoc = doc;
-    // TODO: Update doc on server
+    if (workingDoc != doc)
+    {
+        workingDoc = doc;
+        sendDocumentUpdate(doc);
+        emit docChanged();
+    }
 }
 
 QString GoogleLogin::doc() const
@@ -117,11 +121,29 @@ void GoogleLogin::updateDocumentList()
     QString updateUrl("https://docs.google.com/feeds/documents/private/full");
     KQOAuthParameters params;
     params.insert("showfolders", "true");
-    pDocUpdateReply = oauthManager->sendAuthorizedGetRequest(QUrl(updateUrl), params);
+    pDocUpdateReply = oauthManager->sendAuthorizedRequest(QUrl(updateUrl),
+                                                          params,
+                                                          KQOAuthRequest::GET);
+}
+
+void GoogleLogin::sendDocumentUpdate(QString document)
+{
+    QString reqUrl(QString("https://docs.google.com/feeds/media/private/full/document%3A")
+                   + docId);
+    KQOAuthParameters params;
+
+    QString rawData(document);
+
+    oauthManager->sendAuthorizedRequest(reqUrl,
+                                        params,
+                                        KQOAuthRequest::PUT,
+                                        rawData.toAscii());
+
 }
 
 void GoogleLogin::requestDocument(QString documentId)
 {
+    // Ensure document-prefix is stripped
     const QString docPrefix("document:");
     if (documentId.indexOf(docPrefix) == 0)
     {
@@ -133,7 +155,10 @@ void GoogleLogin::requestDocument(QString documentId)
     KQOAuthParameters params;
     params.insert("exportFormat", "html");
     params.insert("id", documentId);
-    QNetworkReply* reply = oauthManager->sendAuthorizedGetRequest(reqUrl, params);
+    docId = documentId;
+    QNetworkReply* reply = oauthManager->sendAuthorizedRequest(reqUrl,
+                                                               params,
+                                                               KQOAuthRequest::GET);
     sDocUpdateSet.insert(reply);
 }
 
