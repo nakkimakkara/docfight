@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QSettings>
+#include <QSet>
 
 class KQOAuthManager;
 class KQOAuthRequest;
@@ -49,6 +50,7 @@ private:
     QString doccari;
 
     QNetworkReply* pDocUpdateReply;
+    QSet<QNetworkReply*> sDocUpdateSet;
 };
 
 #endif // GOOGLELOGIN_H

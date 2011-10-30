@@ -97,6 +97,9 @@ void GoogleLogin::onAccessTokenReceived(QString token, QString tokenSecret) {
     qDebug() << "Access tokens now stored!";
 
     emit connectionEstablished();
+
+    //updateDocumentList();
+    requestDocument("142AeJYRIHCYZHloxwffPpcvXQd_sqycOdpFzD04dGRI");
 }
 
 void GoogleLogin::updateDocumentList()
@@ -109,6 +112,13 @@ void GoogleLogin::updateDocumentList()
 
 void GoogleLogin::requestDocument(QString documentId)
 {
+    QString reqUrl(QString("https://docs.google.com/feeds/download/documents/Export"));
+
+    KQOAuthParameters params;
+    params.insert("exportFormat", "html");
+    params.insert("id", documentId);
+    QNetworkReply* reply = oauthManager->sendAuthorizedGetRequest(reqUrl, params);
+    sDocUpdateSet.insert(reply);
 }
 
 void GoogleLogin::setUsername(QString name)
@@ -129,5 +139,16 @@ void GoogleLogin::onAuthorizedRequestDone() {
 void GoogleLogin::onRequestReady(QNetworkReply* reply, QByteArray response) {
     qDebug() << "Response from the service: " << response;
     doccari = QString(response);
-    emit docListChanged();
+
+    if (pDocUpdateReply == reply)
+    {
+        emit docListChanged();
+        pDocUpdateReply = NULL;
+    }
+    else if (sDocUpdateSet.contains(reply))
+    {
+        qDebug() << response;
+        //emit documentReady();
+        sDocUpdateSet.remove(reply);
+    }
 }
