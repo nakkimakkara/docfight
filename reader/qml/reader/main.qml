@@ -2,6 +2,7 @@ import QtQuick 1.0
 import "UiConstants.js" as UI
 
 Rectangle {
+    id: root
     width: 360
     height: 360
 
@@ -46,5 +47,14 @@ Rectangle {
         visible: false
 
         onBackClicked: state = UI.MainListState
+    }
+
+    Connections {
+        target: loggeri
+        onDocChanged:
+        {
+            dokumenttiNakyma.update()
+            root.state = UI.MainDocState
+        }
     }
 }

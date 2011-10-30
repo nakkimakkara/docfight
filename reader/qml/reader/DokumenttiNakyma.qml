@@ -7,6 +7,10 @@ Item {
 
     onVisibleChanged: if (visible) { dokumentti.text = loggeri.doc }
 
+    function update() {
+        dokumentti.text = loggeri.doc
+    }
+
     Rectangle {
         id: topBar
         height: 40
