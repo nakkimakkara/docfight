@@ -11,8 +11,8 @@ Component {
         Gradient {
             id: blurGradient
             GradientStop {position: 0; color: "#ffffff"}
-            GradientStop {position: 0.01; color: "#bbbbbb"}
-            GradientStop {position: 0.99; color: "#bbbbbb"}
+            GradientStop {position: 0.01; color: "#dddddd"}
+            GradientStop {position: 0.99; color: "#dddddd"}
             GradientStop {position: 1; color: "#999999"}
         }
         Gradient {
@@ -40,12 +40,12 @@ Component {
                 anchors.left: parent.left
             }
             Row {
-                opacity: 0.7
+//                opacity: 0.7
                 spacing: 5
                 anchors.left: parent.left
                 Text {
                     font.pixelSize: UI.ListLastViewFontSize
-                    color: "#5555ff"
+                    color: "#2222ff"
 
                     text: "Last viewed on:"
                 }
@@ -54,7 +54,7 @@ Component {
                     id: lastViewedText
                     text: lastViewed
                     font.pixelSize: UI.ListLastViewFontSize
-                    color: "#5555ff"
+                    color: "#2222ff"
 
                     //                anchors.verticalCenter: parent.verticalCenter
                 }
