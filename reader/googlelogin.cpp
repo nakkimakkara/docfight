@@ -122,6 +122,12 @@ void GoogleLogin::updateDocumentList()
 
 void GoogleLogin::requestDocument(QString documentId)
 {
+    const QString docPrefix("document:");
+    if (documentId.indexOf(docPrefix) == 0)
+    {
+        documentId = documentId.right(documentId.count() - docPrefix.count());
+    }
+
     QString reqUrl(QString("https://docs.google.com/feeds/download/documents/Export"));
 
     KQOAuthParameters params;
@@ -152,11 +158,13 @@ void GoogleLogin::onRequestReady(QNetworkReply* reply, QByteArray response) {
 
     if (pDocUpdateReply == reply)
     {
+        qDebug() << "Received document list update: " << QString(response);
         emit docListChanged();
         pDocUpdateReply = NULL;
     }
     else if (sDocUpdateSet.contains(reply))
     {
+        qDebug() << "Received document fetch reply: " << QString(response);
         workingDoc = response;
         sDocUpdateSet.remove(reply);
         emit docChanged();
