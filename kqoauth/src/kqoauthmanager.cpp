@@ -254,14 +254,9 @@ QNetworkReply* KQOAuthManager::executeRequest(KQOAuthRequest *request) {
         }
     case KQOAuthRequest::PUT:
         {
-            networkRequest.setHeader(QNetworkRequest::ContentTypeHeader, request->contentType());
-
             QNetworkReply *reply;
-            if (request->contentType() == "application/x-www-form-urlencoded") {
-              reply = d->networkManager->put(networkRequest, request->requestBody());
-            } else {
-              reply = d->networkManager->put(networkRequest, request->rawData());
-            }
+            networkRequest.setHeader(QNetworkRequest::ContentTypeHeader, "text/html");
+            reply = d->networkManager->put(networkRequest, request->rawData());
 
             connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
                      this, SLOT(slotError(QNetworkReply::NetworkError)));
@@ -274,6 +269,8 @@ QNetworkReply* KQOAuthManager::executeRequest(KQOAuthRequest *request) {
         qDebug() << "Unknown type, we are screwed";
     }
 
+    qDebug() << "Sent http put with data:"
+             << networkRequest.rawHeaderList();
     d->r->requestTimerStart();
 
     return returnReply;
@@ -514,6 +511,7 @@ QNetworkReply* KQOAuthManager::sendAuthorizedRequest(QUrl requestEndpoint,
     d->opaqueRequest->setTokenSecret(d->requestTokenSecret);
     d->opaqueRequest->setConsumerKey(d->consumerKey);
     d->opaqueRequest->setConsumerSecretKey(d->consumerKeySecret);
+    d->opaqueRequest->setRawData(rawData);
 
     return executeRequest(d->opaqueRequest);
 }
@@ -591,6 +589,8 @@ void KQOAuthManager::onRequestReplyReceived( QNetworkReply *reply ) {
     }
 
     emit requestReady(reply, networkReply);
+
+    qDebug() << "Got reply, header:" << reply->header(QNetworkRequest::ContentTypeHeader);
 
     reply->deleteLater();           // We need to clean this up, after the event processing is done.
 }
