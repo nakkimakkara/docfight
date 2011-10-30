@@ -6,6 +6,7 @@
 
 class KQOAuthManager;
 class KQOAuthRequest;
+class QNetworkReply;
 
 class GoogleLogin : public QObject
 {
@@ -15,14 +16,15 @@ public:
     GoogleLogin(QObject* parent = NULL);
     virtual ~GoogleLogin();
 
-    void xauth();
-    void sendTweet(QString tweet);
-    void showHelp();
-
     QString docList() const;
+
+    Q_INVOKABLE void updateDocumentList();
+    Q_INVOKABLE void requestDocument(QString documentId);
 
 signals:
     void docListChanged();
+    void connectionEstablished();
+    void documentReady(QString documentId, QString documentXml);
 
 public slots:
     void getAccess();
@@ -34,7 +36,7 @@ private slots:
     void onAuthorizationReceived(QString token, QString verifier);
     void onAccessTokenReceived(QString token, QString tokenSecret);
     void onAuthorizedRequestDone();
-    void onRequestReady(QByteArray);
+    void onRequestReady(QNetworkReply*, QByteArray);
 
 private:
     KQOAuthManager *oauthManager;
@@ -45,6 +47,8 @@ private:
     QString password;
 
     QString doccari;
+
+    QNetworkReply* pDocUpdateReply;
 };
 
 #endif // GOOGLELOGIN_H

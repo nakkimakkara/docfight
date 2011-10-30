@@ -147,7 +147,7 @@ KQOAuthManager::~KQOAuthManager()
     delete d_ptr;
 }
 
-void KQOAuthManager::executeRequest(KQOAuthRequest *request) {
+QNetworkReply* KQOAuthManager::executeRequest(KQOAuthRequest *request) {
     Q_D(KQOAuthManager);
 
     d->r = request;
@@ -155,25 +155,27 @@ void KQOAuthManager::executeRequest(KQOAuthRequest *request) {
     if (request == 0) {
         qWarning() << "Request is NULL. Cannot proceed.";
         d->error = KQOAuthManager::RequestError;
-        return;
+        return NULL;
     }
 
     if (!request->requestEndpoint().isValid()) {
         qWarning() << "Request endpoint URL is not valid. Cannot proceed.";
         d->error = KQOAuthManager::RequestEndpointError;
-        return;
+        return NULL;
     }
 
     if (!request->isValid()) {
         qWarning() << "Request is not valid. Cannot proceed.";
         d->error = KQOAuthManager::RequestValidationError;
-        return;
+        return NULL;
     }
 
     d->currentRequestType = request->requestType();
 
     QNetworkRequest networkRequest;
     networkRequest.setUrl( request->requestEndpoint() );
+
+    QNetworkReply* returnReply = NULL;
 
     if (d->autoAuth && d->currentRequestType == KQOAuthRequest::TemporaryCredentials) {
         d->setupCallbackServer();
@@ -223,6 +225,8 @@ void KQOAuthManager::executeRequest(KQOAuthRequest *request) {
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
                  this, SLOT(slotError(QNetworkReply::NetworkError)));
 
+        returnReply = reply;
+
     } else if (request->httpMethod() == KQOAuthRequest::POST) {
 
         networkRequest.setHeader(QNetworkRequest::ContentTypeHeader, request->contentType());
@@ -240,9 +244,13 @@ void KQOAuthManager::executeRequest(KQOAuthRequest *request) {
 
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
                  this, SLOT(slotError(QNetworkReply::NetworkError)));
+
+        returnReply = reply;
     }
 
     d->r->requestTimerStart();
+
+    return returnReply;
 }
 
 void KQOAuthManager::executeAuthorizedRequest(KQOAuthRequest *request, int id) {
@@ -457,19 +465,19 @@ void KQOAuthManager::getUserAccessTokens(QUrl accessTokenEndpoint) {
     executeRequest(d->opaqueRequest);
 }
 
-void KQOAuthManager::sendAuthorizedGetRequest(QUrl requestEndpoint, const KQOAuthParameters &requestParameters)
+QNetworkReply* KQOAuthManager::sendAuthorizedGetRequest(QUrl requestEndpoint, const KQOAuthParameters &requestParameters)
 {
     Q_D(KQOAuthManager);
     if (!d->isAuthorized) {
         qWarning() << "No access tokens retrieved. Cannot send authorized requests.";
         d->error = KQOAuthManager::RequestUnauthorized;
-        return;
+        return NULL;
     }
 
     if (!requestEndpoint.isValid()) {
         qWarning() << "Endpoint for authorized request is not valid. Cannot proceed.";
         d->error = KQOAuthManager::RequestEndpointError;
-        return;
+        return NULL;
     }
 
     d->error = KQOAuthManager::NoError;
@@ -483,8 +491,7 @@ void KQOAuthManager::sendAuthorizedGetRequest(QUrl requestEndpoint, const KQOAut
     d->opaqueRequest->setConsumerKey(d->consumerKey);
     d->opaqueRequest->setConsumerSecretKey(d->consumerKeySecret);
 
-    executeRequest(d->opaqueRequest);
-
+    return executeRequest(d->opaqueRequest);
 }
 
 void KQOAuthManager::sendAuthorizedRequest(QUrl requestEndpoint, const KQOAuthParameters &requestParameters) {
@@ -559,7 +566,7 @@ void KQOAuthManager::onRequestReplyReceived( QNetworkReply *reply ) {
     // We need to emit the signal even if we got an error.
     if (d->error != KQOAuthManager::NoError) {
         reply->deleteLater();
-        emit requestReady(networkReply);
+        emit requestReady(reply, networkReply);
         d->emitTokens();
         return;
     }
@@ -587,7 +594,7 @@ void KQOAuthManager::onRequestReplyReceived( QNetworkReply *reply ) {
             }
     }
 
-    emit requestReady(networkReply);
+    emit requestReady(reply, networkReply);
 
     reply->deleteLater();           // We need to clean this up, after the event processing is done.
 }
@@ -671,12 +678,14 @@ void KQOAuthManager::slotError(QNetworkReply::NetworkError error) {
     Q_UNUSED(error)
     Q_D(KQOAuthManager);
 
-    d->error = KQOAuthManager::NetworkError;
-    QByteArray emptyResponse;
-    emit requestReady(emptyResponse);
-    emit authorizedRequestDone();
 
     QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
+
+    d->error = KQOAuthManager::NetworkError;
+    QByteArray emptyResponse;
+    emit requestReady(reply, emptyResponse);
+    emit authorizedRequestDone();
+
     d->requestIds.remove(reply);
     reply->deleteLater();
 }

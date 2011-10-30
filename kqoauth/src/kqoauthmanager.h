@@ -58,7 +58,7 @@ public:
      * When the request is done it will emit signal requestReady(QByteArray networkReply).
      * NOTE: At the moment there is no timeout for the request.
      */
-    void executeRequest(KQOAuthRequest *request);    
+    QNetworkReply* executeRequest(KQOAuthRequest *request);
     void executeAuthorizedRequest(KQOAuthRequest *request, int id);
     /**
      * Indicates to the user that KQOAuthManager should handle user authorization by
@@ -121,7 +121,7 @@ public:
      */
     void sendAuthorizedRequest(QUrl requestEndpoint, const KQOAuthParameters &requestParameters);
 
-    void sendAuthorizedGetRequest(QUrl requestEndpoint, const KQOAuthParameters &requestParameters);
+    QNetworkReply* sendAuthorizedGetRequest(QUrl requestEndpoint, const KQOAuthParameters &requestParameters);
 
     /**
      * Sets a custom QNetworkAccessManager to handle network requests. This method can be useful if the
@@ -141,7 +141,7 @@ public:
 Q_SIGNALS:
     // This signal will be emitted after each request has got a reply.
     // Parameter is the raw response from the service.
-    void requestReady(QByteArray networkReply);
+    void requestReady(QNetworkReply* reply, QByteArray networkReply);
 
     void authorizedRequestReady(QByteArray networkReply, int id);
 
