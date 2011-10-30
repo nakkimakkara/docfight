@@ -3,6 +3,7 @@ import "UiConstants.js" as UI
 
 Component {
     id: delegaatti
+
     Rectangle {
         height: contentColumn.height + contentColumn.anchors.margins * 2
         width: parent.width
@@ -11,36 +12,51 @@ Component {
         Gradient {
             id: blurGradient
             GradientStop {position: 0; color: "#ffffff"}
-            GradientStop {position: 0.01; color: "#dddddd"}
-            GradientStop {position: 0.99; color: "#dddddd"}
+            GradientStop {position: 0.03; color: "#dddddd"}
+            GradientStop {position: 0.97; color: "#dddddd"}
             GradientStop {position: 1; color: "#999999"}
         }
         Gradient {
             id: focusGradient
             GradientStop {position: 0; color: "#dddddd"}
-            GradientStop {position: 0.01; color: "#bbbbbb"}
-            GradientStop {position: 0.99; color: "#bbbbbb"}
+            GradientStop {position: 0.03; color: "#bbbbbb"}
+            GradientStop {position: 0.97; color: "#bbbbbb"}
             GradientStop {position: 1; color: "#777777"}
         }
         gradient: mouseArea.containsMouse ? focusGradient : blurGradient
+
+        Image {
+            function iconForResource(resourceId) {
+                if (resourceId.indexOf("document:") !== -1) {
+                    return "https://ssl.gstatic.com/docs/doclist/images/icon_9_document_list.png"
+                } else {
+                    return "https://ssl.gstatic.com/docs/doclist/images/icon_9_spreadsheet_list.png"
+
+                }
+            }
+
+            id: icon
+            source: iconForResource(resourceId)
+            anchors.margins: 10
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+        }
 
         Column {
             id: contentColumn
             spacing: 5
             anchors.margins: 10
             anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
+            anchors.left: icon.right
             anchors.right: parent.right
 
             Text {
                 id: text
                 text: title
                 font.pixelSize: UI.ListFontSize
-                //                anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
             }
             Row {
-//                opacity: 0.7
                 spacing: 5
                 anchors.left: parent.left
                 Text {
@@ -55,8 +71,6 @@ Component {
                     text: lastViewed
                     font.pixelSize: UI.ListLastViewFontSize
                     color: "#2222ff"
-
-                    //                anchors.verticalCenter: parent.verticalCenter
                 }
             }
         }
