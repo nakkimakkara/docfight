@@ -2,7 +2,7 @@ import QtQuick 1.0
 
 XmlListModel {
     id: modeli
-    xml: loggeri.doclist
+    xml: loggeri.docList
 
     query: "/feed/entry"
     namespaceDeclarations: "declare default element namespace 'http://www.w3.org/2005/Atom'; declare namespace gd = 'http://schemas.google.com/g/2005';"

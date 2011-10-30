@@ -39,4 +39,8 @@ Rectangle {
 
         onBackClicked: state = UI.MainListState
     }
+
+    Connections {
+
+    }
 }
