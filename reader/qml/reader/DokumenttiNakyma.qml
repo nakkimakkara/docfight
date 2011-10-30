@@ -25,15 +25,21 @@ Item {
             MouseArea {
                 anchors.fill: parent
 
-                onClicked: backClicked()
+                onClicked: {
+                    console.log("Back clicked")
+                    dokumenttiNakyma.backClicked()
+                }
             }
         }
     }
 
-    Text {
-        id: dokumentti
+    Flickable {
         anchors.top: topBar.bottom
         anchors.bottom: parent.bottom
-        text: ""
+        contentHeight: dokumentti.height
+        Text {
+            id: dokumentti
+            text: ""
+        }
     }
 }

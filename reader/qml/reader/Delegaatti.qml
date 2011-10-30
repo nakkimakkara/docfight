@@ -45,9 +45,5 @@ Component {
                 loggeri.requestDocument(resourceId)
             }
         }
-
-        Component.onCompleted: {
-            console.log(title)
-        }
     }
 }

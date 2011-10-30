@@ -46,7 +46,10 @@ Rectangle {
         anchors.fill: parent
         visible: false
 
-        onBackClicked: state = UI.MainListState
+        onBackClicked: {
+            console.log("signal received")
+            root.state = UI.MainListState
+        }
     }
 
     Connections {
