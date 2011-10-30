@@ -98,6 +98,7 @@ void GoogleLogin::onAccessTokenReceived(QString token, QString tokenSecret) {
     qDebug() << "Access tokens now stored!";
 
     emit connectionEstablished();
+    updateDocumentList();
 }
 
 void GoogleLogin::setDoc(QString doc)
