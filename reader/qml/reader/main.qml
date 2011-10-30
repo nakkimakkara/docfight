@@ -6,6 +6,8 @@ PageStackWindow {
 
     initialPage: mainPage
 
+    color: "#eeeeee"
+
     MainPage {
         id: mainPage
     }

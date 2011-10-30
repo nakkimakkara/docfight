@@ -12,8 +12,8 @@ Component {
         Gradient {
             id: blurGradient
             GradientStop {position: 0; color: "#ffffff"}
-            GradientStop {position: 0.02; color: "#dddddd"}
-            GradientStop {position: 0.98; color: "#dddddd"}
+            GradientStop {position: 0.02; color: "#eeeeee"}
+            GradientStop {position: 0.98; color: "#eeeeee"}
             GradientStop {position: 1; color: "#999999"}
         }
         Gradient {

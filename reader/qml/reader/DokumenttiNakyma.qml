@@ -14,11 +14,15 @@ Item {
     onVisibleChanged: if (visible) { dokumentti.text = loggeri.doc }
 
     function update() {
+        // TODO: add header update
         dokumentti.text = loggeri.doc
     }
 
     Flickable {
-        anchors.fill: parent
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: header.bottom
+        anchors.bottom: parent.bottom
         anchors.margins: 10
         contentHeight: dokumentti.height
 
@@ -28,5 +32,9 @@ Item {
 
            onTextChanged: console.log("korkeus: "+ height)
         }
+    }
+
+    Header {
+        id: header
     }
 }
